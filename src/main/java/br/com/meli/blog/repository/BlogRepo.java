@@ -1,5 +1,6 @@
 package br.com.meli.blog.repository;
 
+import br.com.meli.blog.exceptions.BlogInexistenteException;
 import br.com.meli.blog.exceptions.IdExistenteException;
 import br.com.meli.blog.model.Blog;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,13 +17,13 @@ public class BlogRepo {
     private final String linkFile = "src/main/resources/blogs.json";
     ObjectMapper mapper = new ObjectMapper(); // mapeia objeto
 
-    public List<Blog> getAll(){
+    public List<Blog> getAll() {
         List<Blog> blogs = null;
         try {
             //mapper.readValue: esse metodo procura o arquivo passado no 1 parametro, e faz a leitura caso
             //encontre e tenta converter para o tipo do dado do 2 parametro que nesse caso é Array de Blog.
             blogs = Arrays.asList(mapper.readValue(new File(linkFile), Blog[].class));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("não foi possivel ler esse arquivo");
         }
@@ -32,23 +33,24 @@ public class BlogRepo {
     public Blog createBlog(Blog blog) throws IdExistenteException {
         List<Blog> blogs = new ArrayList<>();
         blogs.addAll(getAll());
-        Blog b = blogs.stream().filter(bl ->bl.getId()==blog.getId()).findAny().orElse(null);
-        if(b != null){
+        Blog b = blogs.stream().filter(bl -> bl.getId() == blog.getId()).findAny().orElse(null);
+        if (b != null) {
             throw new IdExistenteException("Id ja existente no banco de dados");
         }
         blog.setDataPublicacao(LocalDate.now().toString());
         blogs.add(blog);
-        try{
-            mapper.writeValue(new File(linkFile),blogs);
-        }catch (Exception ex){;
-           ex.printStackTrace();
+        try {
+            mapper.writeValue(new File(linkFile), blogs);
+        } catch (Exception ex) {
+            ;
+            ex.printStackTrace();
             System.out.println("erro ao salvar o  arquivo");
         }
         return blog;
     }
 
-    public void getOneBlog(){
+    public Blog consultarBlogId(int id) throws BlogInexistenteException {
         List<Blog> blogs = getAll();
+        return blogs.stream().filter(b -> b.getId() == id).findAny().orElseThrow(() -> new BlogInexistenteException("id não encontrado"));
     }
-
 }
