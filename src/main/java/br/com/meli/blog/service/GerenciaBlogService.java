@@ -1,5 +1,6 @@
 package br.com.meli.blog.service;
 
+import br.com.meli.blog.exceptions.IdExistenteException;
 import br.com.meli.blog.model.Blog;
 import br.com.meli.blog.repository.BlogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,9 @@ public class GerenciaBlogService implements IBLog{
     private BlogRepo blogRepository;
 
     @Override
-    public Blog criarBLog(Blog blog) {
-        return null;
+    public Blog criarBLog(Blog blog) throws IdExistenteException {
+        blogRepository.createBlog(blog);
+        return blog;
     }
 
     @Override

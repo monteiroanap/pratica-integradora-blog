@@ -1,5 +1,6 @@
 package br.com.meli.blog.service;
 
+import br.com.meli.blog.exceptions.IdExistenteException;
 import br.com.meli.blog.model.Blog;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface IBLog {
     // cadastra o blog e retorna o blog cadastrado
-    Blog criarBLog(Blog blog);
+    Blog criarBLog(Blog blog) throws IdExistenteException;
 
     Blog consultarBlogId(int id);
 

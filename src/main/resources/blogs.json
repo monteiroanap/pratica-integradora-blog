@@ -1,14 +1,1 @@
-[
-  {
-    "id": 1,
-    "titulo": "testeBlog",
-    "nomeAutor": "ana",
-    "dataPublicacao": "20/12/2022"
-  },
-  {
-    "id": 2,
-    "titulo": "testeteste2",
-    "nomeAutor": "anaaaaaaaa",
-    "dataPublicacao": "04/10/2022"
-  }
-]
+[{"id":1,"titulo":"testeBlog","nomeAutor":"ana","dataPublicacao":"20/12/2022"},{"id":2,"titulo":"testeteste2","nomeAutor":"anaaaaaaaa","dataPublicacao":"04/10/2022"},{"id":5,"titulo":"teste spring ","nomeAutor":"anaP","dataPublicacao":"2022-10-04"}]

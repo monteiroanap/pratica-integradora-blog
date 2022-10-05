@@ -1,10 +1,13 @@
 package br.com.meli.blog.repository;
 
+import br.com.meli.blog.exceptions.IdExistenteException;
 import br.com.meli.blog.model.Blog;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 //comunicacao com o banco de dados - chamadas de banco
@@ -26,8 +29,22 @@ public class BlogRepo {
         return blogs;
     }
 
-    public void createBlog(Blog blog){
-        List<Blog> blogs = getAll();
+    public Blog createBlog(Blog blog) throws IdExistenteException {
+        List<Blog> blogs = new ArrayList<>();
+        blogs.addAll(getAll());
+        Blog b = blogs.stream().filter(bl ->bl.getId()==blog.getId()).findAny().orElse(null);
+        if(b != null){
+            throw new IdExistenteException("Id ja existente no banco de dados");
+        }
+        blog.setDataPublicacao(LocalDate.now().toString());
+        blogs.add(blog);
+        try{
+            mapper.writeValue(new File(linkFile),blogs);
+        }catch (Exception ex){;
+           ex.printStackTrace();
+            System.out.println("erro ao salvar o  arquivo");
+        }
+        return blog;
     }
 
     public void getOneBlog(){
